@@ -85,6 +85,7 @@ class ProductCategory extends React.Component {
   };
 
   onDrop = acceptedFiles => {
+    setTimeout(() => {}, 5000);
     const formattedProducts = {};
     for (let i = 0; i < acceptedFiles.length; i++) {
       const fileName = acceptedFiles[i].name.split(".")[0];
@@ -158,7 +159,15 @@ class ProductCategory extends React.Component {
         <Dropdown selectors={productMetaData} onChange={this.handleChange}>
           Select product category
         </Dropdown>
-        <Dropzone onDrop={this.onDrop} />
+        <Dropzone 
+        data={{
+          title: `Upload File`,
+          initialStatus: undefined 
+        }}
+        actions={{
+          onDrop: this.onDrop
+        }}
+        />
         {fileUploadInProcess && <div>Uploading files</div>}
         {!fileUploadInProcess && (
           <div>
