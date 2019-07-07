@@ -8,6 +8,19 @@ import Dropzone from "./dropzone";
 import List from "./List";
 import * as s from "./style.scss";
 
+const makeApiCall = (formData) => axios.post('http://localhost:3001/api/uploadFiles',formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(function(response) {
+            console.log('response in post', response);
+            const { data } = response;
+            return data;
+          })
+          .catch(function(error) {
+            console.log('response in post error', error);
+          });
+
 class ProductCategory extends React.Component {
   constructor(props) {
     super(props);
@@ -18,7 +31,8 @@ class ProductCategory extends React.Component {
       selectedFiles: [],
       fileUploadInProcess: false,
       fileCountError: false,
-      formattedProducts: {}
+      formattedProducts: {},
+      uploadedFileUrl: ''
     };
   }
   componentDidMount() {
@@ -86,6 +100,7 @@ class ProductCategory extends React.Component {
   };
 
   onDrop = acceptedFiles => {
+    setTimeout(() => {}, 5000);
     const formattedProducts = {};
     for (let i = 0; i < acceptedFiles.length; i++) {
       const fileName = acceptedFiles[i].name.split(".")[0];
@@ -111,7 +126,7 @@ class ProductCategory extends React.Component {
       {
         selectedFiles: acceptedFiles
       },
-      () => {
+      async () => {
         const { selectedFiles } = this.state;
         // axios
         //   .post("http://localhost:3001/api/uploadFiles", {
@@ -139,16 +154,12 @@ class ProductCategory extends React.Component {
         //         'content-type': 'multipart/form-data'
         //     }
         // };
-        axios.post('http://localhost:3001/api/uploadFiles',formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then(function(response) {
-            console.log('response in post', response);
-          })
-          .catch(function(error) {
-            console.log('response in post error', error);
-          });
+        const data = await makeApiCall(formData);
+         if(data){
+              this.setState({
+                uploadedFileUrl: data.Location
+              })
+            }
       }
     );
   };
@@ -190,14 +201,23 @@ class ProductCategory extends React.Component {
       fileCountError,
       selectedCategory,
       productMetaData,
-      fileUploadInProcess
+      fileUploadInProcess,
+      uploadedFileUrl
     } = this.state;
     return (
       <div>
         <Dropdown selectors={productMetaData} onChange={this.handleChange}>
           Select product category
         </Dropdown>
-        <Dropzone onDrop={this.onDrop} />
+        <Dropzone 
+        data={{
+          title: `Upload File`,
+          initialStatus: undefined 
+        }}
+        actions={{
+          onDrop: this.onDrop
+        }}
+        />
         {fileUploadInProcess && <div>Uploading files</div>}
         {!fileUploadInProcess && (
           <div>
@@ -215,6 +235,7 @@ class ProductCategory extends React.Component {
         )}
         {this.isMinimumFileTypesError()}
         {this.createProductTable()}
+        {uploadedFileUrl}
       </div>
     );
   }

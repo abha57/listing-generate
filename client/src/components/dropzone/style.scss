@@ -1,0 +1,57 @@
+
+.drop-zone {
+    min-height: 20rem;
+    max-width: 20rem;
+    border-width: 0.1rem;
+    border-color: black;
+    border-style: dashed;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    position: relative;
+  
+    &.drop-zone-uploading,
+    &.drop-zone-uploaded {
+      background-color: white;
+    }
+  
+    &.drop-zone-uploaded {
+      border-style: solid;
+      border-color: green;
+    }
+  
+    &.drop-zone-rejected {
+      border-style: solid;
+      border-color: red;
+    }
+  
+    .dropzone-title {
+      margin-top: 3rem;
+      padding: 0 0.8rem;
+      text-align: center;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: black;
+      word-wrap: break-word;
+    }
+  }
+  
+  .progress-bar {
+    height: 1rem;
+    width: 100%;
+    background: skyblue;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10rem;
+  
+    .bar {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: green;
+      width: 80%;
+      border-radius: 10rem;
+    }
+  }
+  
