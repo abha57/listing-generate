@@ -11,18 +11,21 @@ class App extends Component {
   }
 
   fetchDataFromDB = () => {
-    fetch('http://localhost:3001/api/getData')
-      .then((data) => data.json())
-      .then((res) => this.setState({ data: res.data }));
+    axios.get('http://localhost:3001/api/getData')
+      // .then((data) => data.json())
+      .then((res) => {
+        console.log('resepep', res);
+        this.setState({ data: res.data })
+      });
   }
   
   componentDidMount(){
-   // this.fetchDataFromDB();
+   this.fetchDataFromDB();
   }
   render() {
     return (
       <div>
-      <ProductCategory />
+        <ProductCategory />
       </div>
     );
   }

@@ -1,9 +1,12 @@
 import React, { Component } from "react";
 import _ from "lodash";
+import axios from "axios";
+// import classnames from 'classnames';
 import ProductMetaData, { headers } from "../constants";
 import Dropdown from "./dropdown";
 import Dropzone from "./dropzone";
 import List from "./List";
+import * as s from "./style.scss";
 
 class ProductCategory extends React.Component {
   constructor(props) {
@@ -49,9 +52,7 @@ class ProductCategory extends React.Component {
       formattedProducts[product].imageTypes
     );
 
-    if (
-      foundImageTypes.length !== imageTypes.length
-    ) {
+    if (foundImageTypes.length !== imageTypes.length) {
       mandatoryImageTypeNotFound = true;
     }
     if (mandatoryImageTypeNotFound) {
@@ -111,7 +112,43 @@ class ProductCategory extends React.Component {
         selectedFiles: acceptedFiles
       },
       () => {
-        this.createFormattedNames();
+        const { selectedFiles } = this.state;
+        // axios
+        //   .post("http://localhost:3001/api/uploadFiles", {
+        //     files: selectedFiles
+        //   })
+        //   .then(function(response) {
+        //     console.log('response in post', response);
+        //   })
+        //   .catch(function(error) {
+        //     console.log('response in post', error);
+        //   });
+        const filesData = {
+          files: []
+        };
+        // for(let i = 0; i < selectedFiles.length; i++){
+        //   const file = new FormData();
+        //   file.append('file', selectedFiles[i]);
+        //   file.append('name', selectedFiles[i].name);
+        //   filesData.files.push(file);
+        // }
+        const formData = new FormData();
+        formData.append('file', selectedFiles[0]);
+        // const config = {
+        //     headers: {
+        //         'content-type': 'multipart/form-data'
+        //     }
+        // };
+        axios.post('http://localhost:3001/api/uploadFiles',formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(function(response) {
+            console.log('response in post', response);
+          })
+          .catch(function(error) {
+            console.log('response in post error', error);
+          });
       }
     );
   };
@@ -142,7 +179,9 @@ class ProductCategory extends React.Component {
   createProductTable = () => {
     const { formattedProducts } = this.state;
 
-    return Object.keys(formattedProducts).length > 0 ?  <List products={formattedProducts} headers={headers} /> : null;
+    return Object.keys(formattedProducts).length > 0 ? (
+      <List products={formattedProducts} headers={headers} />
+    ) : null;
   };
 
   render() {
