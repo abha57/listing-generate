@@ -18,7 +18,7 @@ const fileType = require('file-type');
 const bluebird = require('bluebird');
 const multiparty = require('multiparty');
 
-// import { AWS_CONFIG } from './rootkey';
+const AWS_CONFIG = require('./rootkey');
 
 // configure the keys for accessing AWS
 AWS.config.update({
