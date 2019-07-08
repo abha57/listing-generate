@@ -20,12 +20,6 @@ const multiparty = require('multiparty');
 
 // import { AWS_CONFIG } from './rootkey';
 
-const AWS_CONFIG = {
-  BUCKET_NAME: 'create-listing',
-  AWS_ACCESS_KEY_ID: "AKIAIHP7IW2ZIBF6OJ2Q",
-  AWS_SECRET_ACCESS_KEY: "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"
-}
-
 // configure the keys for accessing AWS
 AWS.config.update({
   accessKeyId: AWS_CONFIG.AWS_ACCESS_KEY_ID,
