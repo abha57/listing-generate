@@ -1,4 +1,4 @@
-export default [
+const ProductMetaData = [
   {
     id: "jeans",
     title: "Jeans",
@@ -24,3 +24,6 @@ export const headers = [
     label: "Product Generated Image"
   }
 ];
+
+
+export default ProductMetaData;

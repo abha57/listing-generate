@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import _ from "lodash";
 import axios from "axios";
 // import classnames from 'classnames';
-import ProductMetaData, { headers } from "../constants";
-import Dropdown from "./dropdown";
-import Dropzone from "./dropzone";
-import List from "./List";
-import * as s from "./style.scss";
+import ProductMetaData, { headers } from "constants/index";
+import Dropdown from "components/dropdown";
+import Dropzone from "components/dropzone";
+import List from "components/List";
+// import * as s from "./style.scss";
 
 const makeApiCall = (formData) => axios.post('http://localhost:3001/api/uploadFiles',formData, {
           headers: {
@@ -36,6 +36,9 @@ class ProductCategory extends React.Component {
     };
   }
   componentDidMount() {
+    console.log('this.prosp', this.props);
+    const { actions } = this.props;
+    actions('le le');
     this.setState({
       productMetaData: ProductMetaData
     });
@@ -78,18 +81,6 @@ class ProductCategory extends React.Component {
   checkRequiredFilesInEveryProduct = formattedProducts => {
     const { selectedCategory } = this.state;
     const mandatoryImageTypes = selectedCategory.imageTypes;
-
-    // Object.keys(formattedProducts).map( function(product){
-    //     let mandatoryImageTypeNotFound = false;
-    //     const foundImageTypes = _.intersection(mandatoryImageTypes, formattedProducts[product].imageTypes);
-    //
-    //     if(foundImageTypes.length !== formattedProducts[product].imageTypes.length){
-    //         mandatoryImageTypeNotFound = true;
-    //     }
-    //     if(mandatoryImageTypeNotFound){
-    //         formattedProducts[product].fileTypesMissing = true;
-    //     }
-    // }.call(this, mandatoryImageTypes, formattedProducts));
     const formatProducts = Object.keys(formattedProducts).map(product =>
       this.checkProduct(mandatoryImageTypes, formattedProducts, product)
     );
@@ -100,7 +91,6 @@ class ProductCategory extends React.Component {
   };
 
   onDrop = acceptedFiles => {
-    setTimeout(() => {}, 5000);
     const formattedProducts = {};
     for (let i = 0; i < acceptedFiles.length; i++) {
       const fileName = acceptedFiles[i].name.split(".")[0];
@@ -138,22 +128,17 @@ class ProductCategory extends React.Component {
         //   .catch(function(error) {
         //     console.log('response in post', error);
         //   });
-        const filesData = {
-          files: []
-        };
-        // for(let i = 0; i < selectedFiles.length; i++){
-        //   const file = new FormData();
-        //   file.append('file', selectedFiles[i]);
-        //   file.append('name', selectedFiles[i].name);
-        //   filesData.files.push(file);
-        // }
         const formData = new FormData();
-        formData.append('file', selectedFiles[0]);
+        for(let i = 0; i < selectedFiles.length; i++){
+          formData.append('file[]', selectedFiles[i]);
+        }
+        // formData.append('file', selectedFiles[0]);
         // const config = {
         //     headers: {
         //         'content-type': 'multipart/form-data'
         //     }
         // };
+        debugger;
         const data = await makeApiCall(formData);
          if(data){
               this.setState({

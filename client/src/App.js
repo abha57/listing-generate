@@ -1,34 +1,15 @@
-import React, { Component } from "react";
+import React from "react";
 import axios from 'axios';
-import ProductCategory from './components/productCategory';
+import { Route, Link } from 'react-router-dom';
+import ProductCategory from 'containers/productCategory';
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      data: []
-    };
-  }
-
-  fetchDataFromDB = () => {
-    axios.get('http://localhost:3001/api/getData')
-      // .then((data) => data.json())
-      .then((res) => {
-        console.log('resepep', res);
-        this.setState({ data: res.data })
-      });
-  }
-  
-  componentDidMount(){
-   this.fetchDataFromDB();
-  }
-  render() {
-    return (
-      <div>
-        <ProductCategory />
-      </div>
-    );
-  }
-}
+const App = () => (
+  <div>
+  <nav>
+    <Link to='/listing'>Go to listing</Link>
+  </nav>
+    <Route path='/listing' component={ProductCategory} />
+  </div>
+);
 
 export default App;
