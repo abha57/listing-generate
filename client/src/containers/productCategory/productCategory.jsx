@@ -1,25 +1,12 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import axios from "axios";
 // import classnames from 'classnames';
 import ProductMetaData, { headers } from "constants/index";
 import Dropdown from "components/dropdown";
 import Dropzone from "components/dropzone";
 import List from "components/List";
+import auth0Client from 'auth';
 // import * as s from "./style.scss";
-
-const makeApiCall = (formData) => axios.post('http://localhost:3001/api/uploadFiles',formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        }).then(function(response) {
-            console.log('response in post', response);
-            const { data } = response;
-            return data;
-          })
-          .catch(function(error) {
-            console.log('response in post error', error);
-          });
 
 class ProductCategory extends React.Component {
   constructor(props) {
@@ -37,8 +24,9 @@ class ProductCategory extends React.Component {
   }
   componentDidMount() {
     console.log('this.prosp', this.props);
-    const { actions } = this.props;
-    actions('le le');
+    const { listingActions } = this.props;
+    const { productsFetch } = listingActions;
+    productsFetch('le le');
     this.setState({
       productMetaData: ProductMetaData
     });
@@ -92,6 +80,7 @@ class ProductCategory extends React.Component {
 
   onDrop = acceptedFiles => {
     const formattedProducts = {};
+    const { listingActions: { uploadFilesFetch } } = this.props;
     for (let i = 0; i < acceptedFiles.length; i++) {
       const fileName = acceptedFiles[i].name.split(".")[0];
       const formattedName = fileName.split("_");
@@ -116,7 +105,7 @@ class ProductCategory extends React.Component {
       {
         selectedFiles: acceptedFiles
       },
-      async () => {
+      () => {
         const { selectedFiles } = this.state;
         // axios
         //   .post("http://localhost:3001/api/uploadFiles", {
@@ -139,7 +128,7 @@ class ProductCategory extends React.Component {
         //     }
         // };
         debugger;
-        const data = await makeApiCall(formData);
+        const data = uploadFilesFetch(selectedFiles);
          if(data){
               this.setState({
                 uploadedFileUrl: data.Location
@@ -222,7 +211,7 @@ class ProductCategory extends React.Component {
         {this.createProductTable()}
         {uploadedFileUrl}
       </div>
-    );
+    )
   }
 }
 

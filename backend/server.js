@@ -17,6 +17,8 @@ const fs = require('fs');
 const fileType = require('file-type');
 const bluebird = require('bluebird');
 const multiparty = require('multiparty');
+const jwt = require('express-jwt');
+const jwksRsa = require('jwks-rsa');
 
 const AWS_CONFIG = require('./rootkey');
 
@@ -31,6 +33,21 @@ AWS.config.setPromisesDependency(bluebird);
 
 // create S3 instance
 const s3 = new AWS.S3();
+
+// auth0 constant
+const checkJwt = jwt({
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: `https://dev-0hv1j59o.auth0.com/.well-known/jwks.json`
+  }),
+
+  // Validate the audience and the issuer.
+  audience: 'jiPMgU2SF4U00TDa1WGfJKkMqC0msnz3',
+  issuer: `dev-0hv1j59o.auth0.com`,
+  algorithms: ['RS256']
+});
 
 // abstracts function to upload a file returning a promise
 const uploadFile = (buffer, name, type) => {
@@ -85,26 +102,27 @@ router.get('/getData', (req, res) => {
 //   // });
 // });
 
-router.post('/uploadFiles', (request, response) => {
+router.post('/uploadFiles', checkJwt, (request, response) => {
+  console.log('in uppload', files);
   const form = new multiparty.Form();
-    form.parse(request, async (error, fields, files) => {
-      console.log('files----->>>', files);
-      console.log('fields----->>>', fields);
-      if (error) throw new Error(error);
-      try {
-        const path = files.file[0].path;
-        const buffer = fs.readFileSync(path);
-        const type = fileType(buffer);
-        const timestamp = Date.now().toString();
-        const fileName = `bucketFolder/${timestamp}-lg`;
-        const data = await uploadFile(buffer, fileName, type);
-        console.log('data====>>', data);
-        return response.status(200).send(data);
-      } catch (error) {
-        console.log('errro====>>', error);
-        return response.status(400).send(error);
-      }
-    });
+    // form.parse(request, async (error, fields, files) => {
+    //   console.log('files----->>>', files);
+    //   console.log('fields----->>>', fields);
+    //   if (error) throw new Error(error);
+    //   try {
+    //     const path = files.file[0].path;
+    //     const buffer = fs.readFileSync(path);
+    //     const type = fileType(buffer);
+    //     const timestamp = Date.now().toString();
+    //     const fileName = `bucketFolder/${timestamp}-lg`;
+    //     const data = await uploadFile(buffer, fileName, type);
+    //     console.log('data====>>', data);
+    //     return response.status(200).send(data);
+    //   } catch (error) {
+    //     console.log('errro====>>', error);
+    //     return response.status(400).send(error);
+    //   }
+    // });
 });
 
 // this is our delete method
