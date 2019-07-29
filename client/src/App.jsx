@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Link, withRouter } from "react-router-dom";
-import auth0Client from "auth";
+// import auth0Client from "auth";
 import ProductCategory from "containers/productCategory";
 import Callback from "components/callback";
 import SecuredRoute from "components/securedRoute";
@@ -17,12 +17,12 @@ class App extends React.Component {
       this.setState({checkSession:false});
       return;
     }
-    try {
-      await auth0Client.silentAuth();
-      this.forceUpdate();
-    } catch (err) {
-      if (err.error !== "login_required") console.log(err.error);
-    }
+    // try {
+    //   await auth0Client.silentAuth();
+    //   this.forceUpdate();
+    // } catch (err) {
+    //   if (err.error !== "login_required") console.log(err.error);
+    // }
     this.setState({
       checkSession: false
     });
@@ -31,7 +31,7 @@ class App extends React.Component {
     const { checkSession } = this.state;
     return (
       <div>
-        {auth0Client.isAuthenticated() && (
+        {/* {auth0Client.isAuthenticated() && (
           <div>
             Hii
             <button onClick={auth0Client.signOut}> Logout </button>
@@ -39,7 +39,7 @@ class App extends React.Component {
               <Link to="/">Go to listing</Link>
             </nav>
           </div>
-        )}
+        )} */}
         <SecuredRoute
           path="/"
           exact

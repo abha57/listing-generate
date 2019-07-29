@@ -1,10 +1,12 @@
 import React, { Component } from "react";
-import _ from "lodash";
+// import _ from "lodash";
 // import classnames from 'classnames';
 import ProductMetaData, { headers } from "constants/index";
 import Dropdown from "components/dropdown";
 import Dropzone from "components/dropzone";
 import List from "components/List";
+import JeansForm from "components/jeansForm";
+import ShirtForm from "components/shirtForm";
 import auth0Client from 'auth';
 // import * as s from "./style.scss";
 
@@ -52,10 +54,11 @@ class ProductCategory extends React.Component {
 
   checkProduct = (imageTypes, formattedProducts, product) => {
     let mandatoryImageTypeNotFound = false;
-    const foundImageTypes = _.intersection(
-      imageTypes,
-      formattedProducts[product].imageTypes
-    );
+    // const foundImageTypes = _.intersection(
+    //   imageTypes,
+    //   formattedProducts[product].imageTypes
+    // );
+    const foundImageTypes = imageTypes;
 
     if (foundImageTypes.length !== imageTypes.length) {
       mandatoryImageTypeNotFound = true;
@@ -161,6 +164,14 @@ class ProductCategory extends React.Component {
     return null;
   };
 
+  onJeansSubmit(values) {
+    console.log('submitted jeans', values);
+  }
+
+  onShirtsubmit(values){
+    console.log('submitted shirt', values);
+  }
+
   createProductTable = () => {
     const { formattedProducts } = this.state;
 
@@ -183,6 +194,20 @@ class ProductCategory extends React.Component {
         <Dropdown selectors={productMetaData} onChange={this.handleChange}>
           Select product category
         </Dropdown>
+        {
+
+        }
+        { (() => {
+          switch (selectedCategory.id) {
+          case 'jeans':
+            return <JeansForm onSubmit={this.onJeansSubmit} />
+        
+          default:
+            return <ShirtForm onSubmit={this.onShirtsubmit} />
+        }
+        })()
+
+        }
         <Dropzone 
         data={{
           title: `Upload File`,

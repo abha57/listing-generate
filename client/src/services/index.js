@@ -7,7 +7,7 @@ export const makeApiCall = formData =>
     .post("http://localhost:3001/api/uploadFiles", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
-        'Authorization': `Bearer ${auth0Client.getIdToken()}`
+       // 'Authorization': `Bearer ${auth0Client.getIdToken()}`
       }
     })
     .then(function(response) {

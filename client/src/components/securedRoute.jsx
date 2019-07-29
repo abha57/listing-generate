@@ -10,14 +10,7 @@ import auth0Client from 'auth';
          Validating session......
          </div>
      )
-    return auth0Client.isAuthenticated() ? (
-        <Route path={path} component={Component} {...props} />
-    ) : (
-        <div>
-            Sorry please login!!!
-            <button onClick={auth0Client.signIn}>Log In</button>
-        </div>
-    )
+    return <Route path={path} component={Component} {...props} />
 }
 
 export default withRouter(SecuredRoute);

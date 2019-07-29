@@ -34,20 +34,20 @@ AWS.config.setPromisesDependency(bluebird);
 // create S3 instance
 const s3 = new AWS.S3();
 
-// auth0 constant
-const checkJwt = jwt({
-  secret: jwksRsa.expressJwtSecret({
-    cache: true,
-    rateLimit: true,
-    jwksRequestsPerMinute: 5,
-    jwksUri: `https://dev-0hv1j59o.auth0.com/.well-known/jwks.json`
-  }),
+// auth0 configuration
+// const checkJwt = jwt({
+//   secret: jwksRsa.expressJwtSecret({
+//     cache: true,
+//     rateLimit: true,
+//     jwksRequestsPerMinute: 5,
+//     jwksUri: `https://dev-0hv1j59o.auth0.com/.well-known/jwks.json`
+//   }),
 
-  // Validate the audience and the issuer.
-  audience: 'jiPMgU2SF4U00TDa1WGfJKkMqC0msnz3',
-  issuer: `dev-0hv1j59o.auth0.com`,
-  algorithms: ['RS256']
-});
+//   // Validate the audience and the issuer.
+//   audience: 'jiPMgU2SF4U00TDa1WGfJKkMqC0msnz3',
+//   issuer: `dev-0hv1j59o.auth0.com`,
+//   algorithms: ['RS256']
+// });
 
 // abstracts function to upload a file returning a promise
 const uploadFile = (buffer, name, type) => {
@@ -102,7 +102,7 @@ router.get('/getData', (req, res) => {
 //   // });
 // });
 
-router.post('/uploadFiles', checkJwt, (request, response) => {
+router.post('/uploadFiles', (request, response) => {
   console.log('in uppload', files);
   const form = new multiparty.Form();
     // form.parse(request, async (error, fields, files) => {

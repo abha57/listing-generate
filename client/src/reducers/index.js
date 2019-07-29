@@ -122,8 +122,17 @@ const fetchListingReducer = (state = initialState, { type, payload }) => {
   }
 };
 
+const getState = state => state;
+const getForm = state => state.form;
+
+const selectors = {
+  getState,
+  getForm
+};
+
 export default fetchListingReducer;
 export {
     actions,
-    types
+    types,
+    selectors
 }

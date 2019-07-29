@@ -79,6 +79,6 @@ class Auth {
   }
 }
 
-const auth0Client = new Auth();
+const auth0Client = new Auth();  //make sure to have only single instance of auth through out application. Singleton pattern.
 
 export default auth0Client;

@@ -1,5 +1,5 @@
-import { takeLatest, all, call, put } from 'redux-saga/effects';
-import { types, actions } from 'reducers';
+import { takeLatest, all, call, put, select } from 'redux-saga/effects';
+import { types, actions, selectors } from 'reducers';
 import { makeApiCall } from "services";
 
 function* productFetchWorker({ payload }){
@@ -18,6 +18,8 @@ function* productFetchWorker({ payload }){
 
 function* uploadFilesWorker({ payload }){
     const { uploadFilesSuccess, uploadFilesError } = actions;
+    console.log('selectors', selectors);
+    console.log('yied slect', yield select(selectors.getForm));
     try {
         const resp = yield call(makeApiCall, payload);
         if(resp){
