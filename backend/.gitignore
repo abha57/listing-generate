@@ -24,3 +24,6 @@ yarn-error.log*
 
 #aws configuration
 rootkey.js
+
+#env file
+.env
